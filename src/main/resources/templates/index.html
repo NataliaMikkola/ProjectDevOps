@@ -1,0 +1,23 @@
+
+<div class="row">
+
+    <div class="col-md-4 mb-3"
+         th:each="room : ${rooms}">
+
+        <div class="card p-4">
+            <h3 th:text="'Room ' + ${room.roomNumber}">
+                Room
+            </h3>
+
+            <p th:text="'€' + ${room.price} + ' per night'">
+                Price
+            </p>
+
+            <button class="btn btn-primary">
+                Book Room
+            </button>
+        </div>
+
+    </div>
+
+</div>
