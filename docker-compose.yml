@@ -1,0 +1,52 @@
+# Docker Compose for the Hotel Room Booking application
+# Starts three containers that work together:
+#   app      - our Spring Boot application (built from the Dockerfile)
+#   db       - PostgreSQL database used by the app
+#   adminer  - small web tool to look inside the database
+#
+# Start:  docker compose up -d --build
+# Stop:   docker compose down        (add -v to also delete the database data)
+
+services:
+  db:
+    image: postgres:16
+    container_name: hotel-db
+    environment:
+      POSTGRES_DB: hotel
+      POSTGRES_USER: hotel
+      POSTGRES_PASSWORD: hotel123     # course project only - use secrets in a real system
+    ports:
+      - "5432:5432"
+    volumes:
+      - hotel-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hotel -d hotel"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    image: natalimikkol/room-booking-app:compose
+    container_name: hotel-app
+    depends_on:
+      db:
+        condition: service_healthy     # wait until the database is ready
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/hotel
+      SPRING_DATASOURCE_USERNAME: hotel
+      SPRING_DATASOURCE_PASSWORD: hotel123
+    ports:
+      - "8080:8080"
+
+  adminer:
+    image: adminer
+    container_name: hotel-adminer
+    depends_on:
+      - db
+    ports:
+      - "8081:8080"
+
+volumes:
+  hotel-data:
