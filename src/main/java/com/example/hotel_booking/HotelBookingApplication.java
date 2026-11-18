@@ -11,7 +11,7 @@ import org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfigur
 		HibernateJpaAutoConfiguration.class
 })
 public class HotelBookingApplication {
-
+//comment
 	public static void main(String[] args) {
 		SpringApplication.run(HotelBookingApplication.class, args);
 	}
