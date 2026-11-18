@@ -2,7 +2,7 @@
 package com.example.hotel_booking.model;
 
 public class Room {
-
+//its a comment
     private Long id;
     private String roomNumber;
     private double price;
